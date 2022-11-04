@@ -47,13 +47,31 @@
         <input type="file" id="filetoRead" />
         <a id="downloadLink" href="#" download="myFile.txt">Download</a>
         <div class="line-color">
-            <input type="color" id="line-color1" name="line-color1" value="#e66465">
+            <input type="color" id="line-color1" name="line-color1" value="#ff0000">
             <label for="head">Line 1</label>
         </div>
 
         <div class="line-color">
-            <input type="color" id="line-color2" name="line-color2" value="#f6b73c">
+            <input type="color" id="line-color2" name="line-color2" value="#0000ff">
             <label for="body">Line 2</label>
+        </div>
+        <!-- generate line 1 border style picker -->
+        <div class="line-style">
+            <label for="line-style1">Line 1 style:</label>
+            <select name="line-style1" id="line-style1">
+                <option value="solid">Solid</option>
+                <option value="dashed">Dashed</option>
+                <option value="dotted">Dotted</option>
+            </select>
+        </div>
+        <!-- generate line 2 border style picker -->
+        <div class="line-style">
+            <label for="line-style2">Line 2 style:</label>
+            <select name="line-style2" id="line-style2">
+                <option value="solid">Solid</option>
+                <option value="dashed">Dashed</option>
+                <option value="dotted">Dotted</option>
+            </select>
         </div>
         <div class="credits">
             <p>Created by Konrad Kotlicki (310958)</p>

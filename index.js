@@ -1,6 +1,6 @@
-function createPoint(x, y, name, color) {
+function createPoint(x, y, name, color, border) {
     var point = document.createElement("div");
-    var styles = 'border: 1px solid black; '
+    var styles = 'border: 1px ' + border + ' black; '
         + 'width: 10px; '
         + 'height: 10px; '
         + 'border-radius: 5px; '
@@ -19,9 +19,9 @@ function createPoint(x, y, name, color) {
     return point_container;
 }
 
-function createLineElement(x, y, length, angle, color) {
+function createLineElement(x, y, length, angle, color, border) {
     var line = document.createElement("div");
-    var styles = 'border: 1px solid ' + color + '; '
+    var styles = 'border: 1px ' + border + ' ' + color + '; '
         + 'width: ' + length + 'px; '
         + 'height: 0px; '
         + '-moz-transform: rotate(' + angle + 'rad); '
@@ -35,7 +35,7 @@ function createLineElement(x, y, length, angle, color) {
     return line;
 }
 
-function createLine(x1, y1, x2, y2, color) {
+function createLine(x1, y1, x2, y2, color, border) {
     var a = x1 - x2,
         b = y1 - y2,
         c = Math.sqrt(a * a + b * b);
@@ -48,7 +48,7 @@ function createLine(x1, y1, x2, y2, color) {
 
     var alpha = Math.PI - Math.atan2(-b, a);
 
-    return createLineElement(x, y, c, alpha, color);
+    return createLineElement(x, y, c, alpha, color, border);
 }
 
 function translatePoint(p, frame) {
@@ -90,9 +90,9 @@ function getIntersectionPoint(pA, pB, pC, pD) {
 //     document.getElementsByClassName('display')[0].appendChild(frame);
 // }
 
-function drawLines(pA, pB, pC, pD, color1 = "red", color2 = "blue") {
-    document.getElementsByClassName('display')[0].appendChild(createLine(pA.x, pA.y, pB.x, pB.y, color1));
-    document.getElementsByClassName('display')[0].appendChild(createLine(pC.x, pC.y, pD.x, pD.y, color2));
+function drawLines(pA, pB, pC, pD, color1, color2, border1, border2) {
+    document.getElementsByClassName('display')[0].appendChild(createLine(pA.x, pA.y, pB.x, pB.y, color1, border1));
+    document.getElementsByClassName('display')[0].appendChild(createLine(pC.x, pC.y, pD.x, pD.y, color2, border2));
 }
 
 var textFileUrl = null;
@@ -106,7 +106,7 @@ function generateTextFileUrl(txt) {
 };
 
 var out_file_content = "";
-function draw(line1_color = "red", line2_color = "blue") {
+function draw(line1_color = "red", line2_color = "blue", line1_border = "solid", line2_border = "solid") {
     var pA = { x: document.getElementById('xA').value, y: document.getElementById('yA').value };
     var pB = { x: document.getElementById('xB').value, y: document.getElementById('yB').value };
     var pC = { x: document.getElementById('xC').value, y: document.getElementById('yC').value };
@@ -128,12 +128,12 @@ function draw(line1_color = "red", line2_color = "blue") {
     document.getElementsByClassName('display')[0].innerHTML = '';
     // drawFrame()
 
-    drawLines(pa, pb, pc, pd, line1_color, line2_color);
+    drawLines(pa, pb, pc, pd, line1_color, line2_color, line1_border, line2_border);
     var display = document.getElementsByClassName('display')[0]
-    display.appendChild(createPoint(pa.x, pa.y, "A", line1_color));
-    display.appendChild(createPoint(pb.x, pb.y, "B", line1_color));
-    display.appendChild(createPoint(pc.x, pc.y, "C", line2_color));
-    display.appendChild(createPoint(pd.x, pd.y, "D", line2_color));
+    display.appendChild(createPoint(pa.x, pa.y, "A", line1_color, line1_border));
+    display.appendChild(createPoint(pb.x, pb.y, "B", line1_color, line1_border));
+    display.appendChild(createPoint(pc.x, pc.y, "C", line2_color, line2_border));
+    display.appendChild(createPoint(pd.x, pd.y, "D", line2_color, line2_border));
     display.appendChild(createPoint(p_t.x, p_t.y, "P", "green"));
     out_file_content = "A " + pA.x + " " + pA.y + "\n" + "B " + pB.x + " " + pB.y + "\n" + "C " + pC.x + " " + pC.y + "\n" + "D " + pD.x + " " + pD.y + "\n" + "P " + pt.x + " " + pt.y + "\n";
 
@@ -143,7 +143,7 @@ function draw(line1_color = "red", line2_color = "blue") {
 draw();
 
 [...document.getElementsByTagName('input')].forEach(item => {
-    item.addEventListener('change', draw);
+    item.addEventListener('change', draw());
 })
 
 document.getElementById("filetoRead").addEventListener("change", function () {
@@ -159,7 +159,7 @@ document.getElementById("filetoRead").addEventListener("change", function () {
                 document.getElementById('x' + elements[0]).value = elements[1];
                 document.getElementById('y' + elements[0]).value = elements[2];
             }
-            draw();
+            draw(document.getElementById('line-color1').value, document.getElementById('line-color2').value, document.getElementById("line-style1").value, document.getElementById("line-style2").value);
         };
 
         reader.onerror = function (evt) {
@@ -170,14 +170,14 @@ document.getElementById("filetoRead").addEventListener("change", function () {
     }
 }, false);
 
-document.body.addEventListener("scroll", draw)
+// document.body.addEventListener("scroll", draw)
 
 document.getElementById("line-color1").addEventListener("input", watchColorPicker1, false);
 document.getElementById("line-color1").addEventListener("change", watchColorPicker1, false);
 
 function watchColorPicker1(event) {
     document.getElementById("line-color1").style.backgroundColor = event.target.value;
-    draw(event.target.value, document.getElementById("line-color2").value);
+    draw(event.target.value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, document.getElementById("line-style2").value);
 }
 
 document.getElementById("line-color2").addEventListener("input", watchColorPicker2, false);
@@ -185,5 +185,18 @@ document.getElementById("line-color2").addEventListener("change", watchColorPick
 
 function watchColorPicker2(event) {
     document.getElementById("line-color2").style.backgroundColor = event.target.value;
-    draw(document.getElementById("line-color1").value, event.target.value);
+    draw(document.getElementById("line-color1").value, event.target.value, document.getElementById("line-style1").value, document.getElementById("line-style2").value);
 }
+
+document.getElementById("line-style1").addEventListener("change", watchStylePicker1, false);
+
+function watchStylePicker1(event) {
+    draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, event.target.value, document.getElementById("line-style2").value);
+}
+
+document.getElementById("line-style2").addEventListener("change", watchStylePicker2, false);
+
+function watchStylePicker2(event) {
+    draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, event.target.value);
+}
+
