@@ -38,6 +38,5 @@ body {
 
 .credits {
     flex: 1;
-    /* add spacing above */
     padding-top: 3rem;
 }

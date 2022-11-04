@@ -142,9 +142,17 @@ function draw(line1_color = "red", line2_color = "blue", line1_border = "solid",
 
 draw();
 
-[...document.getElementsByTagName('input')].forEach(item => {
-    item.addEventListener('change', draw());
-})
+var input_rows = document.getElementsByClassName('input-row');
+for (var i = 0; i < input_rows.length; i++) {
+    var input_row = input_rows[i];
+    var inputs = input_row.getElementsByTagName('input');
+    for (var j = 0; j < inputs.length; j++) {
+        var input = inputs[j];
+        input.addEventListener('input', function () {
+            draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, document.getElementById("line-style2").value);
+        });
+    }
+}
 
 document.getElementById("filetoRead").addEventListener("change", function () {
     var file = this.files[0];
@@ -169,8 +177,6 @@ document.getElementById("filetoRead").addEventListener("change", function () {
         reader.readAsText(file, "UTF-8");
     }
 }, false);
-
-// document.body.addEventListener("scroll", draw)
 
 document.getElementById("line-color1").addEventListener("input", watchColorPicker1, false);
 document.getElementById("line-color1").addEventListener("change", watchColorPicker1, false);
@@ -199,4 +205,3 @@ document.getElementById("line-style2").addEventListener("change", watchStylePick
 function watchStylePicker2(event) {
     draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, event.target.value);
 }
-
