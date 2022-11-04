@@ -1,0 +1,43 @@
+body {
+    height: 100vh;
+    display: flex;
+
+}
+
+.left-panel {
+    flex: 1;
+    background-color: #1b1b1b;
+    color: #fff;
+}
+
+.right-panel {
+    display: flex;
+    flex: 2;
+    flex-direction: column;
+    color: #fff;
+}
+
+.display {
+    flex: 2;
+    background-color: #292929;
+    position: relative;
+}
+
+.input-row {
+    display: flex;
+    background-color: #ffa500;
+    gap: 0.5rem;
+    color: #000;
+}
+
+.point-row {
+    display: flex;
+    background-color: #000;
+    gap: 0.5rem;
+}
+
+.credits {
+    flex: 1;
+    /* add spacing above */
+    padding-top: 3rem;
+}
