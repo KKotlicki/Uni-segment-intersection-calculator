@@ -5,14 +5,13 @@ body {
 }
 
 .left-panel {
-    flex: 1;
     background-color: #1b1b1b;
     color: #fff;
 }
 
 .right-panel {
     display: flex;
-    flex: 2;
+    flex: 1;
     flex-direction: column;
     color: #fff;
 }

@@ -78,17 +78,17 @@ function getIntersectionPoint(pA, pB, pC, pD) {
     return { x: x, y: y };
 }
 
-// function drawFrame() {
-//     var frame = document.createElement("div");
-//     var styles = 'border: 1px solid black; '
-//         + 'width: ' + (document.getElementsByClassName('display')[0].clientWidth - 128) + 'px; '
-//         + 'height: ' + (document.getElementsByClassName('display')[0].clientHeight - 128) + 'px; '
-//         + 'position: absolute; '
-//         + 'top: 64px; '
-//         + 'left: 64px; ';
-//     frame.setAttribute('style', styles);
-//     document.getElementsByClassName('display')[0].appendChild(frame);
-// }
+function drawFrame() {
+    var frame = document.createElement("div");
+    var styles = 'border: 1px solid black; '
+        + 'width: ' + (document.getElementsByClassName('display')[0].clientWidth - 128) + 'px; '
+        + 'height: ' + (document.getElementsByClassName('display')[0].clientHeight - 128) + 'px; '
+        + 'position: absolute; '
+        + 'top: 64px; '
+        + 'left: 64px; ';
+    frame.setAttribute('style', styles);
+    document.getElementsByClassName('display')[0].appendChild(frame);
+}
 
 function drawLines(pA, pB, pC, pD, color1, color2, border1, border2) {
     document.getElementsByClassName('display')[0].appendChild(createLine(pA.x, pA.y, pB.x, pB.y, color1, border1));
@@ -106,7 +106,7 @@ function generateTextFileUrl(txt) {
 };
 
 var out_file_content = "";
-function draw(line1_color = "red", line2_color = "blue", line1_border = "solid", line2_border = "solid") {
+function draw(line1_color = "red", line2_color = "blue", line1_border = "solid", line2_border = "solid", show_points = true, show_frame = false) {
     var pA = { x: document.getElementById('xA').value, y: document.getElementById('yA').value };
     var pB = { x: document.getElementById('xB').value, y: document.getElementById('yB').value };
     var pC = { x: document.getElementById('xC').value, y: document.getElementById('yC').value };
@@ -126,15 +126,17 @@ function draw(line1_color = "red", line2_color = "blue", line1_border = "solid",
     document.getElementById('yP').value = pt.y;
 
     document.getElementsByClassName('display')[0].innerHTML = '';
-    // drawFrame()
+    if (show_frame) drawFrame()
 
     drawLines(pa, pb, pc, pd, line1_color, line2_color, line1_border, line2_border);
     var display = document.getElementsByClassName('display')[0]
-    display.appendChild(createPoint(pa.x, pa.y, "A", line1_color, line1_border));
-    display.appendChild(createPoint(pb.x, pb.y, "B", line1_color, line1_border));
-    display.appendChild(createPoint(pc.x, pc.y, "C", line2_color, line2_border));
-    display.appendChild(createPoint(pd.x, pd.y, "D", line2_color, line2_border));
-    display.appendChild(createPoint(p_t.x, p_t.y, "P", "green"));
+    if (show_points) {
+        display.appendChild(createPoint(pa.x, pa.y, "A", line1_color, line1_border));
+        display.appendChild(createPoint(pb.x, pb.y, "B", line1_color, line1_border));
+        display.appendChild(createPoint(pc.x, pc.y, "C", line2_color, line2_border));
+        display.appendChild(createPoint(pd.x, pd.y, "D", line2_color, line2_border));
+        display.appendChild(createPoint(p_t.x, p_t.y, "P", "green"));
+    }
     out_file_content = "A " + pA.x + " " + pA.y + "\n" + "B " + pB.x + " " + pB.y + "\n" + "C " + pC.x + " " + pC.y + "\n" + "D " + pD.x + " " + pD.y + "\n" + "P " + pt.x + " " + pt.y + "\n";
 
     document.getElementById('downloadLink').href = generateTextFileUrl(out_file_content);
@@ -149,7 +151,7 @@ for (var i = 0; i < input_rows.length; i++) {
     for (var j = 0; j < inputs.length; j++) {
         var input = inputs[j];
         input.addEventListener('input', function () {
-            draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, document.getElementById("line-style2").value);
+            draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, document.getElementById("line-style2").value, document.getElementById("show-hide-point").checked);
         });
     }
 }
@@ -167,7 +169,7 @@ document.getElementById("filetoRead").addEventListener("change", function () {
                 document.getElementById('x' + elements[0]).value = elements[1];
                 document.getElementById('y' + elements[0]).value = elements[2];
             }
-            draw(document.getElementById('line-color1').value, document.getElementById('line-color2').value, document.getElementById("line-style1").value, document.getElementById("line-style2").value);
+            draw(document.getElementById('line-color1').value, document.getElementById('line-color2').value, document.getElementById("line-style1").value, document.getElementById("line-style2").value, document.getElementById("show-hide-point").checked);
         };
 
         reader.onerror = function (evt) {
@@ -183,7 +185,7 @@ document.getElementById("line-color1").addEventListener("change", watchColorPick
 
 function watchColorPicker1(event) {
     document.getElementById("line-color1").style.backgroundColor = event.target.value;
-    draw(event.target.value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, document.getElementById("line-style2").value);
+    draw(event.target.value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, document.getElementById("line-style2").value, document.getElementById("show-hide-point").checked);
 }
 
 document.getElementById("line-color2").addEventListener("input", watchColorPicker2, false);
@@ -191,17 +193,24 @@ document.getElementById("line-color2").addEventListener("change", watchColorPick
 
 function watchColorPicker2(event) {
     document.getElementById("line-color2").style.backgroundColor = event.target.value;
-    draw(document.getElementById("line-color1").value, event.target.value, document.getElementById("line-style1").value, document.getElementById("line-style2").value);
+    draw(document.getElementById("line-color1").value, event.target.value, document.getElementById("line-style1").value, document.getElementById("line-style2").value, document.getElementById("show-hide-point").checked);
 }
 
 document.getElementById("line-style1").addEventListener("change", watchStylePicker1, false);
 
 function watchStylePicker1(event) {
-    draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, event.target.value, document.getElementById("line-style2").value);
+    draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, event.target.value, document.getElementById("line-style2").value, document.getElementById("show-hide-point").checked);
 }
 
 document.getElementById("line-style2").addEventListener("change", watchStylePicker2, false);
 
 function watchStylePicker2(event) {
-    draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, event.target.value);
+    draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, event.target.value, document.getElementById("show-hide-point").checked);
 }
+
+document.getElementById("show-hide-point").addEventListener("change", watchShowPoints, false);
+
+function watchShowPoints(event) {
+    draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, document.getElementById("line-style2").value, event.target.checked);
+}
+
