@@ -39,3 +39,11 @@ body {
     flex: 1;
     padding-top: 3rem;
 }
+
+input {
+    color: #000;
+}
+
+input[type="file"] {
+    color: #fff;
+}
