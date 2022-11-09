@@ -10,7 +10,7 @@ function createPoint(x, y, name, color, border) {
     var styles_container = 'position: absolute; '
         + 'top: ' + y + 'px; '
         + 'left: ' + x + 'px; '
-        + 'transform: translate(-50%, -75%); '
+        + 'transform: translate(-33.3%, -75%); '
         + 'font-weight: 900; '
         + 'font-size: 20px; ';
     point_container.setAttribute('style', styles_container);
@@ -214,3 +214,8 @@ function watchShowPoints(event) {
     draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, document.getElementById("line-style2").value, event.target.checked);
 }
 
+window.addEventListener('resize', watchGeneric, false);
+
+function watchGeneric() {
+    draw(document.getElementById("line-color1").value, document.getElementById("line-color2").value, document.getElementById("line-style1").value, document.getElementById("line-style2").value, document.getElementById("show-hide-point").checked);
+}
